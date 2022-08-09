@@ -9,6 +9,7 @@ const App = () => {
 
   const [searchField, setSearchField] = useState(''); // [value, setValue]
   const [monsters, setMonsters] = useState([]);
+  const [filteredMonsters, setFilteredMonster] = useState(monsters);
 
   useEffect(() => {
     console.log('effect fired')
@@ -17,15 +18,18 @@ const App = () => {
       .then((users) => setMonsters(users));
   }, [])
 
+  useEffect(() => {
+    const newFilteredMonsters = monsters.filter((monster) => {
+      return monster.name.toLocaleLowerCase().includes(searchField);
+    });
+    setFilteredMonster(newFilteredMonsters);
+  },[monsters, searchField]);
+
   const onSearchChange = (event) => {
     const searchFieldString = event.target.value.toLocaleLowerCase();
     setSearchField(searchFieldString);
 
   }
-
-  const filteredMonsters = monsters.filter((monster) => {
-    return monster.name.toLocaleLowerCase().includes(searchField);
-  });
 
   return(
     <div className="App">
@@ -40,29 +44,5 @@ const App = () => {
     </div>
   );
 }
-
-
-// class App extends Component {
-
-//   constructor() {
-//     super();
-    
-//     this.state = {
-//       monsters: [],
-//       searchField: '',
-//     };
-//   }
-
-//   render() {
-
-//     const { monsters, searchField } = this.state;
-//     const { onSearchChange } = this;
-//     return (
-
-//       <div className="App">
-//       </div>
-//     );
-//   }
-// }
 
 export default App;
